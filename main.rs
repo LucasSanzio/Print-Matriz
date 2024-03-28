@@ -2,7 +2,7 @@ use std::fs::File;
 use std::io::{BufReader, stdin};
 use std::path::Path;
 
-fn somar_matriz(matriz: Vec<Vec<i64>>) -> (i64, Vec<(usize, usize)>) {
+fn somar_matriz(matriz: Vec<Vec<i64>>) -> (i64, Vec<(usize, usize)>, i64) {
     let mut soma = 0;
     let mut indices_utilizados = Vec::new();
     let mut linha:usize = 1;
@@ -35,7 +35,7 @@ fn somar_matriz(matriz: Vec<Vec<i64>>) -> (i64, Vec<(usize, usize)>) {
         linha += 1;
         coluna += 0;
 
-    (soma, indices_utilizados)
+    (soma, indices_utilizados, contador)
 }
 
 fn imprimir_matriz(matriz: &Vec<Vec<i64>>, indices_utilizados: &Vec<(usize, usize)>) {
@@ -57,7 +57,7 @@ fn main() {
     let file = File::open(&path).unwrap();
     let reader = BufReader::new(file);
     let matriz: Vec<Vec<i64>> = serde_json::from_reader(reader).unwrap();
-    let (soma, indices_utilizados) = somar_matriz(matriz.clone());
+    let (soma, indices_utilizados, contador) = somar_matriz(matriz.clone());
 
     println!("Digite a operação desejada: ");
     print!("Soma S ou Média M => ");
@@ -67,7 +67,7 @@ fn main() {
     if o == "S" {
         println!("Soma: {}", soma);
     } else {
-        println!("Média: {}", soma);
+        println!("Média: {}", soma / contador);
     }
 
     println!("Matriz:");
